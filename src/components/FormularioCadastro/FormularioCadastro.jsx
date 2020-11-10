@@ -1,18 +1,19 @@
 import React, { useState } from "react";
 import { Button, TextField, Switch, FormControlLabel } from "@material-ui/core";
 
-function FormularioCadastro() {
+function FormularioCadastro({aoEnviar}) {
   const [nome, setNone] = useState("");
   const [sobreNome, setSobrenome] = useState("");
   const [cpf, setCpf] = useState("");
   const [promocoes, setPromocoes] = useState(true);
   const [novidades, setNovidades] = useState(false);
+  const [errors, setErrors] = useState({cpf:{valido:true,texto:""}})
 
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        console.log({nome, sobreNome, cpf, novidades, promocoes});
+        aoEnviar({nome, sobreNome, cpf, promocoes,novidades})
       }}
     >
       <TextField
@@ -43,7 +44,12 @@ function FormularioCadastro() {
         onChange={(event) => {
           setCpf(event.target.value);
         }}
+        onBlur ={(event)=>{
+          setErrors({cpf:{valido:false,texto:"CPF deve ter no minimo 11 caracteres"}})
+        }}
         value={cpf}
+        error={!errors.cpf.valido}
+        helperText={errors.cpf.texto}
         id="cpf"
         label="CPF"
         variant="outlined"
