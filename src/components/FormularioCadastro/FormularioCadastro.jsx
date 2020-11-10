@@ -1,20 +1,25 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button, TextField, Switch, FormControlLabel } from "@material-ui/core";
 
 function FormularioCadastro() {
-  let nome = "";
-  
+  const [nome, setNone] = useState("");
+  const [sobreNome, setSobrenome] = useState("");
+  const [cpf, setCpf] = useState("");
+  const [promocoes, setPromocoes] = useState(true);
+  const [novidades, setNovidades] = useState(false);
+
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        console.log(nome);
+        console.log({nome, sobreNome, cpf, novidades, promocoes});
       }}
     >
       <TextField
         onChange={(event) => {
-          nome = event.target.value;
+          setNone(event.target.value);
         }}
+        value={nome}
         id="nome"
         label="Nome"
         variant="outlined"
@@ -23,6 +28,10 @@ function FormularioCadastro() {
       ></TextField>
 
       <TextField
+        onChange={(event) => {
+          setSobrenome(event.target.value);
+        }}
+        value={sobreNome}
         id="sobrenome"
         label="Sobrenome"
         variant="outlined"
@@ -31,6 +40,10 @@ function FormularioCadastro() {
       ></TextField>
 
       <TextField
+        onChange={(event) => {
+          setCpf(event.target.value);
+        }}
+        value={cpf}
         id="cpf"
         label="CPF"
         variant="outlined"
@@ -40,12 +53,32 @@ function FormularioCadastro() {
 
       <FormControlLabel
         label="Promoções"
-        control={<Switch name="promocoes" defaultChecked color="primary" />}
+        control={
+          <Switch
+            checked={promocoes}
+            onChange={(event) => {
+              setPromocoes(event.target.checked);
+            }}
+            name="promocoes"
+           // defaultChecked
+            color="primary"
+          />
+        }
       />
 
       <FormControlLabel
         label="Novidades"
-        control={<Switch name="novidades" defaultChecked color="primary" />}
+        control={
+          <Switch
+            checked={novidades}
+            onChange={(event) => {
+              setNovidades(event.target.checked);
+            }}
+            name="novidades"
+           // defaultChecked
+            color="primary"
+          />
+        }
       />
 
       <Button type="submit" variant="contained" color="primary">
