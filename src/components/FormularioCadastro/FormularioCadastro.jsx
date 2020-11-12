@@ -1,30 +1,32 @@
 import { Typography } from "@material-ui/core";
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import DadosEntrega from "./DadosEntrega";
 import DadosPessoais from "./DadosPessoais";
 import DadosUsuario from "./DadosUsuario";
 
 function FormularioCadastro({ aoEnviar, validarCpf }) {
-  const [etapa, setEtapa] = useState(0);
+  const [etapaAtual, setEtapaAtual] = useState(0);
+  const [dadosColetados, setDadosColetados] = useState({});
+  useEffect(()=>{
+    console.log(dadosColetados);
+  })
 
-  function Proximo(){
-    setEtapa(etapa+1)
+  const etapas = [
+    <DadosUsuario aoEnviar={DadosColetados} />,
+    <DadosPessoais aoEnviar={DadosColetados} validarCpf={validarCpf} />,
+    <DadosEntrega aoEnviar={DadosColetados} />,
+  ];
+
+  function DadosColetados(dados) {
+    setDadosColetados({ ...dadosColetados, ...dados });
+    Proximo();
   }
 
-  function FormularioAtual(etapa) {
-    switch (etapa) {
-      case 0:
-        return <DadosUsuario aoEnviar={Proximo}/>;
-      case 1:
-        return <DadosPessoais aoEnviar={Proximo} validarCpf={validarCpf} />;
-      case 2:
-        return <DadosEntrega aoEnviar={aoEnviar}/>;
-      default:
-        <Typography>"Erro desconhecido!!"</Typography>;
-    }
+  function Proximo() {
+    setEtapaAtual(etapaAtual + 1);
   }
 
-  return <Fragment>{FormularioAtual(etapa)}</Fragment>;
+  return <Fragment>{etapas[etapaAtual]}</Fragment>;
 }
 
 export default FormularioCadastro;
