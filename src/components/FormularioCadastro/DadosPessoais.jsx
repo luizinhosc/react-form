@@ -1,19 +1,38 @@
 import React, { useState } from "react";
 import { Button, TextField, Switch, FormControlLabel } from "@material-ui/core";
 
-function DadosPessoais({aoEnviar, validarCpf}) {
+function DadosPessoais({ aoEnviar, validacoes }) {
   const [nome, setNone] = useState("");
   const [sobreNome, setSobrenome] = useState("");
   const [cpf, setCpf] = useState("");
   const [promocoes, setPromocoes] = useState(true);
   const [novidades, setNovidades] = useState(false);
-  const [errors, setErrors] = useState({cpf:{valido:true,texto:""}})
+  const [errors, setErrors] = useState({ cpf: { valido: true, texto: "" } });
+
+  function validarCampo(event) {
+    const { name, value } = event.target;
+    const novoEstado = { ...errors };
+    novoEstado[name] = validacoes[name](value);
+    setErrors(novoEstado);
+  }
+
+  function possoEnviar(){
+    let posso = true;
+    for(let campo in errors){
+      if(!errors[campo].valido){
+        return false
+      }
+      return posso
+    }
+  }
 
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        aoEnviar({nome, sobreNome, cpf, promocoes,novidades})
+        if(possoEnviar()){
+          aoEnviar({ nome, sobreNome, cpf, promocoes, novidades });
+        }
       }}
     >
       <TextField
@@ -44,15 +63,12 @@ function DadosPessoais({aoEnviar, validarCpf}) {
         onChange={(event) => {
           setCpf(event.target.value);
         }}
-        onBlur ={(event)=>{
-          const errors = validarCpf(cpf)
-          console.log({errors});
-          setErrors({cpf:errors})
-        }}
+        onBlur={validarCampo}
         value={cpf}
         error={!errors.cpf.valido}
         helperText={errors.cpf.texto}
         id="cpf"
+        name="cpf"
         label="CPF"
         variant="outlined"
         margin="normal"
@@ -68,7 +84,7 @@ function DadosPessoais({aoEnviar, validarCpf}) {
               setPromocoes(event.target.checked);
             }}
             name="promocoes"
-           // defaultChecked
+            // defaultChecked
             color="primary"
           />
         }
@@ -83,7 +99,7 @@ function DadosPessoais({aoEnviar, validarCpf}) {
               setNovidades(event.target.checked);
             }}
             name="novidades"
-           // defaultChecked
+            // defaultChecked
             color="primary"
           />
         }
