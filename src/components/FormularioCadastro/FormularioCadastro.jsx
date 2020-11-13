@@ -14,8 +14,6 @@ function FormularioCadastro({ aoEnviar, validacoes }) {
     }
   });
 
-  console.log(validacoes);
-
   const etapas = [
     <DadosUsuario aoEnviar={DadosColetados} validacoes={validacoes} />,
     <DadosPessoais aoEnviar={DadosColetados} validacoes={validacoes} />,

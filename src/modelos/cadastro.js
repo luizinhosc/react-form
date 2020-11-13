@@ -1,5 +1,4 @@
 function validarCpf(cpf) {
-    console.log(cpf.length);
   if (cpf.length !== 11) {
     return { valido: false, texto: "Cpf deve ter 11 digitos!" };
   } else {
